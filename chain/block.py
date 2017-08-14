@@ -1,4 +1,4 @@
-import time
+import datetime
 import hashlib
 
 class Block:
@@ -6,7 +6,7 @@ class Block:
         self.index = index
         self.previous_hash = previous_hash
         self.data = data
-        self.time_stamp = int(time.time() * 1e6) # epoch in micro seconds
+        self.time_stamp = datetime.datetime.utcnow().isoformat()
         self.hash = self.generate_hash()
 
     def generate_hash(self):
@@ -14,7 +14,5 @@ class Block:
         hash.update(str(self.index).encode())
         hash.update(self.previous_hash.encode())
         hash.update(self.data.encode())
-        hash.update(str(self.time_stamp).encode())
+        hash.update(self.time_stamp.encode())
         return hash.hexdigest()
-
-
