@@ -1,4 +1,3 @@
-import pytest
 from chain.chain import Chain
 from chain.block import Block
 
