@@ -1,5 +1,6 @@
 import os
 import json
+import time
 from flask import Flask
 from twitter import Api
 from chain.chain import Chain
@@ -20,14 +21,8 @@ def hello():
     return "Hello World!"
 
 @app.route("/check")
-def check_for_updates():
-    api = Api(CONSUMER_KEY,
-              CONSUMER_SECRET,
-              ACCESS_TOKEN,
-              ACCESS_TOKEN_SECRET)
-    statuses = api.GetUserTimeline(user_id=USER_ID)
-    status_list = [dict(user=status.user.screen_name, text = status.text, id = status.id, created = status.created_at) for status in statuses]
-    return  json.dumps(status_list)
+def check():
+    return json.dumps(get_latest_tweets_sorted())
 
 @app.route("/last")
 def get_last_block_data():
@@ -35,6 +30,32 @@ def get_last_block_data():
 
 @app.route("/update")
 def update_block_chain_data():
-    # now we just need to add all tweets that are not on blocks yet.
-    pass
+    latest_tweets = get_latest_tweets_sorted()
+    if len(trump_chain.chain) is 1:
+        add_all_tweets(latest_tweets)
+    else:
+        last_data = trump_chain.get_latest_block().data
+        created_at = json.loads(last_data)['created']
+        # TODO: only add the newest blocks
+    return "Done"
 
+@app.route("/validate")
+def check_if_block_chain_is_valid():
+    return str(trump_chain.all_blocks_valid())
+
+def get_latest_tweets_sorted():
+    api = Api(CONSUMER_KEY,
+              CONSUMER_SECRET,
+              ACCESS_TOKEN,
+              ACCESS_TOKEN_SECRET)
+    statuses = api.GetUserTimeline(user_id=USER_ID)
+    status_list = list()
+    for status in statuses:
+        created_at = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(status.created_at, '%a %b %d %H:%M:%S +0000 %Y'))
+        status_list.append(dict(user=status.user.screen_name, text=status.text, id=status.id, created=created_at))
+        status_list = sorted(status_list, key=lambda k: k['created'])
+    return status_list
+
+def add_all_tweets(latest_tweets):
+    for tweet in latest_tweets:
+        trump_chain.add_new_block(json.dumps(tweet))
