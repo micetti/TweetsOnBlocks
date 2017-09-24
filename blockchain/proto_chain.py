@@ -32,7 +32,7 @@ class ProtoChain:
             f.write(self.chain.SerializeToString())
             f.close()
         except IOError:
-            print("No existing protobuf file found. Creating new one")
+            print("Writing to file failed. Last Block was not stored")
 
 proto_chain = ProtoChain()
 proto_chain.add_new_block("Hello")
