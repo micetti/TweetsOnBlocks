@@ -1,6 +1,6 @@
 import logging
 
-from chain.block import Block
+from blockchain.block import Block
 
 logger = logging.getLogger(__name__)
 
@@ -25,14 +25,14 @@ class Chain:
         for index in range(len(self.chain)):
             if index == 0:
                 if not self.first_block_is_valid():
-                    logger.error('Invalid first block of chain')
+                    logger.error('Invalid first block of blockchain')
                     return False
             else:
                 if not self.indices_are_correct(index):
-                    logger.error('Invalid indices in chain at index {}'.format(index))
+                    logger.error('Invalid indices in blockchain at index {}'.format(index))
                     return False
                 if not self.is_valid_block(index):
-                    logger.error('Invalid block found in chain at index {}'.format(index))
+                    logger.error('Invalid block found in blockchain at index {}'.format(index))
                     return False
         return True
 

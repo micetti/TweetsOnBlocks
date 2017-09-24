@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package chain;
+
+message BlockChain {
+
+    message Block {
+        required int32 index = 1;
+        required string previous_hash = 2;
+        required string data = 3;
+        required string time_stamp = 4;
+        required string hash = 5;
+    }
+
+    repeated Block blocks = 1;
+}

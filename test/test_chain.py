@@ -1,5 +1,5 @@
-from chain.chain import Chain
-from chain.block import Block
+from blockchain.chain import Chain
+from blockchain.block import Block
 
 class TestChain:
     def test_chain_constructor(self):

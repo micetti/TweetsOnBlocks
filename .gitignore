@@ -1,4 +1,4 @@
 .cache
 .pyc
 export_env.sh
-chain/__pycache__/
+blockchain/__pycache__/

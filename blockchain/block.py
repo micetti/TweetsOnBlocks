@@ -16,3 +16,10 @@ class Block:
         hash.update(self.data.encode())
         hash.update(self.time_stamp.encode())
         return hash.hexdigest()
+
+    def add_to_proto(self, proto_block):
+        proto_block.index = self.index
+        proto_block.previous_hash = self.previous_hash
+        proto_block.data = self.data
+        proto_block.time_stamp = self.time_stamp
+        proto_block.hash = self.hash

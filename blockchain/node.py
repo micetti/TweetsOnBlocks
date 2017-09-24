@@ -3,7 +3,7 @@ import json
 import time
 from flask import Flask
 from twitter import Api
-from chain.chain import Chain
+from blockchain.chain import Chain
 
 
 app = Flask(__name__)
@@ -49,7 +49,9 @@ def update_block_chain_data():
 
 @app.route("/validate")
 def check_if_block_chain_is_valid():
-    return str(trump_chain.all_blocks_valid())
+    is_valid = str(trump_chain.all_blocks_valid())
+    number_of_blocks = len(trump_chain.chain)
+    return "The whole blockchain is valid: {}\n\nCurrent total length of the blockchain: {}".format(is_valid, number_of_blocks)
 
 def get_latest_tweets_sorted():
     api = Api(CONSUMER_KEY,
